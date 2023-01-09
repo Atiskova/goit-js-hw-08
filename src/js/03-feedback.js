@@ -1,16 +1,14 @@
 import throttle from 'lodash.throttle';
 
 const contactFormEl = document.querySelector('.feedback-form');
-const userInfo = {};
-
+// localStorage.clear();
 
 const fillContactFormFields = () => {
     try {
         const userInfoFormLS = JSON.parse(localStorage.getItem('feedback-form-state'));
         if (userInfoFormLS === null) {
-        return
+        return;
         }
-        console.log(userInfoFormLS);
 
         for (const prop in userInfoFormLS) {
         contactFormEl.elements[prop].value = userInfoFormLS[prop];
@@ -23,19 +21,21 @@ const fillContactFormFields = () => {
 fillContactFormFields();
 
 const onContactFormFieldInput = event => {
-const { target } = event;
+    const email = contactFormEl.elements.email.value;
+    const message = contactFormEl.elements.message.value;
 
-// const fieldValue = target.value;
-// const fieldName = target.name;
+    const userInfo = {
+        email,
+        message,
+    };
 
-userInfo[target.name] = target.value;
-
-
-localStorage.setItem('feedback-form-state', JSON.stringify(userInfo));
+  localStorage.setItem('feedback-form-state', JSON.stringify(userInfo));
 };
 
 const onContactFormFieldSubmit = event => {
     event.preventDefault();
+    console.log(JSON.parse(localStorage.getItem('feedback-form-state')));
+
     contactFormEl.reset();
     localStorage.removeItem('feedback-form-state');
 };
